@@ -1,0 +1,41 @@
+Service Mesh
+Build Resilient Services
+18:50 19 Apr 2018
+Tags: servicemesh, microservices, linkerd
+
+Alex Tan Hong Pin
+(Ex-)Developer Advocate, SeekAsia
+alextan220990@gmail.com
+https://github.com/alextanhongpin
+
+* What is a Service Mesh
+
+A dedicated infrastructure layer for making service-to-service communication safe, fast and reliable. 
+
+  If you are building a cloud native application, you need a service mesh. - Buoyant
+
+* Linkerd (CNCF)
+
+.image assets/linkerd.png
+
+* Logic Code or Infrastructure?
+
+- circuit-breaker, retries, timeouts
+- dynamic routing
+- service discovery
+- load-balancing
+- monitoring
+
+* Pros/Cons for Code or Infrastructure
+
+Arguments for code:
+
+- more granular control
+- easier to implement
+
+Arguments for infra:
+
+- language-agnostic (don't need to worry about missing libraries)
+- drop-in plug-and-play
+- isolate repetitive functionality
+- deployable as a container sidecar 
