@@ -4,7 +4,7 @@ Build Resilient Services
 Tags: servicemesh, microservices, linkerd
 
 Alex Tan Hong Pin
-(Ex-)Developer Advocate, SeekAsia
+Developer Advocate, SeekAsia
 alextan220990@gmail.com
 https://github.com/alextanhongpin
 
@@ -18,24 +18,150 @@ A dedicated infrastructure layer for making service-to-service communication saf
 
 .image assets/linkerd.png
 
-* Logic Code or Infrastructure?
 
-- circuit-breaker, retries, timeouts
-- dynamic routing
-- service discovery
-- load-balancing
-- monitoring
+Resilient service mesh for cloud native apps. Successor of Finagle that is used by Twitter.
+
+Alternatives are _Envoy_, _Traefik_, _Istio_.
+
+.link https://www.cncf.io/ Part of Cloud Native Computing Foundation (CNCF)
+
+* Hard-Coded Logic or Infrastructure?
+
+When writing microservices, we need:
+
+- retries and timeouts
+- monitoring/visibility
+- tracing
+- service discovery, etc. 
+- TLS
+
+which are all hard-coded into each application.
 
 * Pros/Cons for Code or Infrastructure
 
 Arguments for code:
 
 - more granular control
-- easier to implement
+- easier to implement if working on one language only
+- typical in monolith architecture
 
 Arguments for infra:
 
 - language-agnostic (don't need to worry about missing libraries)
 - drop-in plug-and-play
 - isolate repetitive functionality
-- deployable as a container sidecar 
+- deployable as a container sidecar or per-host (k8s daemonsets)
+
+* Baseline resilience
+
+retry budgets, deadlines, circuit-breaking
+
+  routers:
+  - ...
+    service:
+      retries:
+        budget:
+          minRetriesPerSec: 5
+          percentCanRetry: 0.5
+          ttlSecs: 15
+        backoff:
+          kind: jittered
+          minMs: 10
+          maxMs: 10000
+
+Top: For every *5* non-retry calls, allow *half* of it to retry. The retry should be a jittered backoff in range of *0.01s* to *10s*. 
+
+* Top-line service metrics & Distributed tracing
+
+Connects with _Prometheus_, _InfluxDB_, _StatsD_ and _Zipkin_, provides success rates, request volumes, and latencies.
+
+Example *Prometheus* config:
+
+  telemetry:
+  - kind: io.l5d.prometheus
+    path: /admin/metrics/prometheus
+    prefix: linkerd_
+
+* Latency and failure tolerance
+
+Failure and latency-aware load balancing that can route around slow or broken service instances.
+
+  routers:
+  - ...
+    client:
+      failureAccrual:
+        kind: io.l5d.successRate
+        successRate: 0.9
+        requests: 1000
+        backoff:
+          kind: jittered
+          minMs: 5000
+          maxMs: 300000
+
+Top: Prefer to send requests to services that has a 90% success rate
+
+* Service discovery
+
+Locate destination instances through _namers_. A _namer_ binds a concrete name to a physical address.
+
+- File-based 
+- ZooKeeper ServerSets 
+- Consul
+- Kubernetes
+- Marathon
+- DNS SRV Records
+- ZooKeeper
+- Curator
+
+* Protocol upgrades
+
+Wrapping cross-network communication in TLS, or converting HTTP/1.1 to HTTP/2.0 (gRPC)
+
+.image assets/buoyant-l2l-diagram.png
+
+Keeps your code DRY :)
+
+* Load Balancer
+
+Provides latency-aware load balancing:
+
+- *p2c*: Power of Two Choices: Least Loaded
+- *ewma*: Power of Two Choices: Peak EWMA
+- *aperture*: Aperture: Least Loaded
+- *roundRobin*: RoundRobin
+
+Also, supports gRPC load balancing!
+
+Linkerd is categorized as a L7 (application level) load balancer, similar to Envoy. Compared to L3/4 (transport level) load balancers, L7 LB actually adds slightly more latency due to additional hops.
+
+* Dynamic Routing
+
+Route requests between different versions of services, failover between clusters, etc.
+
+This kind of traffic shifting enables things like:
+
+- blue-green deploys
+- canary
+- A/B testing 
+- cross-DC failover
+
+Using *namerd* enables the ability to make these dtab changes at runtime, without needing to restart Linkerd.
+
+* Traffic Shifting Demo
+
+We will be running k8s with Minikube for this demo
+
+- setup linkerd + namerd
+- setup blue & green services
+- expose the linkerd port
+- shift blue traffic to green from 10%, 50% and then 100% 
+
+* References
+
+.link https://linkerd.io/ Linkerd Website
+.link https://www.cncf.io/ Cloud Native Computing Foundation (CNCF)
+.link https://grpc.io/blog/loadbalancing Load Balancing gRPC
+.link https://github.com/alextanhongpin/kubernetes-structure github.com/alextanhongpin/kubernetes-structure
+.link https://github.com/alextanhongpin/go-present-servicemesh Presentation Materials
+
+* Q&A
