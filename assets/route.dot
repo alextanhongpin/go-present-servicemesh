@@ -1,0 +1,13 @@
+digraph G {
+  rankdir = LR;
+  node [shape = box]
+  "Users" -> "Linkerd"
+  {
+    node [fillcolor = paleturquoise, style = filled]
+    "Linkerd" -> "Blue" [label = "99% users"]
+  }
+  {
+    node [fillcolor = palegreen, style = filled]
+    "Linkerd" -> "Green" [label = "1% users"]
+  }
+}

@@ -175,7 +175,7 @@ Route requests between different versions of services, failover between clusters
 This kind of traffic shifting enables things like:
 
 - blue-green deploys
-- canary
+- canary release
 - A/B testing 
 - cross-DC failover
 
@@ -191,6 +191,14 @@ Using *namerd* enables the ability to make these dtab changes at runtime, withou
 : Each services can have multiple instances - service discovery, managing updates
 
 * Demo
+
+* Canary release
+
+*Canary* *release* is a technique to reduce the risk of introducing a new software version in production by slowly rolling out the change to a small subset of users before rolling it out to the entire infrastructure and making it available to everybody.
+
+.image assets/route.png
+
+: The name for this technique originates from miners who would carry a canary in a cage down the coal mines. If toxic gases leaked into the mine, it would kill the canary before killing the miners. A canary release provides a similar form of early warning for potential problems before impacting your entire production infrastructure or user base.
 
 * Traffic Shifting with Linkerd
 
