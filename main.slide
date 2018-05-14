@@ -8,16 +8,35 @@ Developer Advocate, SeekAsia
 alextan220990@gmail.com
 https://github.com/alextanhongpin
 
+
+* Evolution of Services
+
+.image assets/evolution.jpg
+.caption From monolith to SOA to microservice to serverless
+
 * What is a Service Mesh
 
 A dedicated infrastructure layer for making service-to-service communication safe, fast and reliable. 
 
   If you are building a cloud native application, you need a service mesh. - Buoyant
 
+.image assets/mesh.png
+.caption Managing complex service topology with service mesh
+
+: Almost every system is a distributed system.
+
+* Why do you need it
+
+- you have a lot of services
+- you want to add resiliency to your services
+- your organization is using more than 1 language
+- you want to scale it across teams
+
+: Each services can have multiple instances - service discovery, managing updates
+
 * Linkerd (CNCF)
 
 .image assets/linkerd.png
-
 
 Resilient service mesh for cloud native apps. Successor of Finagle that is used by Twitter.
 
@@ -25,9 +44,14 @@ Alternatives are _Envoy_, _Traefik_, _Istio_.
 
 .link https://www.cncf.io/ Part of Cloud Native Computing Foundation (CNCF)
 
+* Resiliency Patterns by Uwe Friedrichsen
+
+.image assets/resiliency_patterns_by_uwe_friedrichsen.png
+
+
 * Hard-Coded Logic or Infrastructure?
 
-When writing microservices, we need:
+When writing services, we need:
 
 - retries and timeouts
 - monitoring/visibility
@@ -51,6 +75,11 @@ Arguments for infra:
 - drop-in plug-and-play
 - isolate repetitive functionality
 - deployable as a container sidecar or per-host (k8s daemonsets)
+
+* Failures in production
+
+- Thundering Herd Problem
+- Cascading failure is a process in a system of interconnected parts in which the failure of one or few parts can trigger the failure of other parts
 
 * Baseline resilience
 
@@ -163,5 +192,7 @@ We will be running k8s with Minikube for this demo
 .link https://grpc.io/blog/loadbalancing Load Balancing gRPC
 .link https://github.com/alextanhongpin/kubernetes-structure github.com/alextanhongpin/kubernetes-structure
 .link https://github.com/alextanhongpin/go-present-servicemesh Presentation Materials
+.link https://www.slideshare.net/ufried/patterns-of-resilience Resiliency Patterns by Uwe Friedrichsen
+.link https://www.nginx.com/blog/mitigating-thundering-herd-problem-pbs-nginx/#thunderingherd Mitigating Thundering Herd Problem with Nginx
 
 * Q&A
