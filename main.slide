@@ -17,7 +17,7 @@ https://github.com/alextanhongpin
 
 * Hard-Coded Logic or Infrastructure?
 
-When writing services, we need:
+Capabilities required in cloud native applications:
 
 - retries and timeouts
 - monitoring/visibility
@@ -57,9 +57,9 @@ A dedicated infrastructure layer for making service-to-service communication saf
 
 .image assets/linkerd.png
 
-- Resilient service mesh for cloud native apps. Successor of Finagle that is used by Twitter.
+- Resilient service mesh for cloud native apps.
 - Alternatives are *Envoy*, *Traefik*, *Istio* and *Conduit* (new!).
-- First generation service mesh includes Netflix's [[https://github.com/Netflix/Hystrix][*Hystrix*]] and Facebook's [[https://github.com/facebook/proxygen][*Proxygen*]].
+- First generation service mesh includes Netflix's [[https://github.com/Netflix/Hystrix][*Hystrix*]], Twitter's [[https://twitter.github.io/finagle/][*Finagle*]] (successor) and Facebook's [[https://github.com/facebook/proxygen][*Proxygen*]].
 - Part of [[https://www.cncf.io/][Cloud Native Computing Foundation (CNCF)]]
 
 * Capabilities
